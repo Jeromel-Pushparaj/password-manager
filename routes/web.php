@@ -1,11 +1,26 @@
 <?php
 
+use App\Http\Controllers\GeneratorController;
+use App\Http\Controllers\PasswordsController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('home');
+    return view('welcome');
 });
 
-Route::view('login', 'login')->name('login');
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::view('generate', 'generate')->name('generate');
+Route::get('/generate', [GeneratorController::class, 'index'])->middleware(['auth', 'verified'])->name('generate');
+
+Route::get('/', [PasswordsController::class, 'index'])->middleware(['auth', 'verified'])->name('home');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';

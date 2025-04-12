@@ -1,7 +1,7 @@
-@extends('layouts.app')
-@section('content')
+<x-app-layout>
     <div class="flex justify-center items-center w-full min-h-screen bg-gray-900">
-        <div class="p-8 w-11/12 rounded-2xl border shadow-xl md:w-3/4 lg:w-2/3 backdrop-blur-lg bg-white/10 border-white/20">
+        <div
+            class="p-8 w-11/12 rounded-2xl border shadow-xl md:w-3/4 lg:w-2/3 backdrop-blur-lg bg-white/10 border-white/20">
             <div class="flex justify-between items-center mb-4">
                 <button class="py-2 px-4 text-white bg-purple-600 rounded-lg hover:bg-purple-700">Generate</button>
                 <input type="text" placeholder="Enter a Site"
@@ -44,4 +44,4 @@
         </div>
     </div>
     </div>
-@endsection
+</x-app-layout>
