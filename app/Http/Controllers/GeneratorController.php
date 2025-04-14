@@ -3,24 +3,102 @@
 namespace App\Http\Controllers;
 
 use App\Models\Passwords;
+use Faker\Factory as Faker;
 use Illuminate\Http\Request;
 
 class GeneratorController extends Controller
 {
+    private $passwd;
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('generate');
+        return view('generate.index');
+    }
+
+    private function secureShuffle($string)
+    {
+        $array = str_split($string);
+        $length = count($array);
+
+        for ($i = $length - 1; $i > 0; $i--) {
+            $j = random_int(0, $i);
+            [$array[$i], $array[$j]] = [$array[$j], $array[$i]];
+        }
+
+        return implode('', $array);
+    }
+
+    private function sentance($length)
+    {
+        $faker = Faker::create();
+        $sen = $faker->sentence(12);
+
+        // Strip spaces and period, lowercased, limited to length+1 chars
+        $str = str_replace([' ', '.'], '', strtolower($sen));
+        $str = substr($str, 0, $length);
+
+        return $str;
+    }
+
+    private function generatePasswd($length, $c = 0, $n = 0, $s = 0)
+    {
+        $chars = $this->sentance($length);
+        $symbols = '!@#$%^&*()-_=+[]{}|,.<>?/';
+        $length = strlen($chars);
+        $chars = str_split($chars);
+
+        // Make one char uppercase
+        if ($c) {
+            $chars[0] = strtoupper($chars[0]);
+
+        }
+        // Inject a symbol
+        if ($s) {
+            $chars[1] = $symbols[random_int(0, strlen($symbols) - 1)];
+        }
+        // Inject a digit
+        if ($n) {
+            $chars[2] = (string) random_int(0, 9);
+        }
+
+        return $this->secureShuffle(implode('', $chars));
+
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $site = $request->input('site');
+        $username = $request->input('username');
+        $email = $request->input('email');
+        $lenth = $request->input('lenth');
+        $category = $request->input('category');
+
+        if (isset($site, $username, $email, $category)) {
+
+            $caps = $request->input('caps') ?? 0;
+            $numeric = $request->input('nums') ?? 0;
+            $symbols = $request->input('symbols') ?? 0;
+            $this->passwd = $this->generatePasswd($lenth, $caps, $numeric, $symbols);
+            Passwords::create([
+                'site' => $site,
+                'username' => $username,
+                'email' => $email,
+                'password' => $this->passwd,
+                'category' => $category,
+            ]);
+
+        } else {
+            //
+        }
+
+        return redirect()->route('home');
+
     }
 
     /**

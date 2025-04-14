@@ -15,14 +15,15 @@ class PasswordsController extends Controller
         //
         $passwords = Passwords::all();
 
-        return view('home', ['passwords' => $passwords]);
+        return view('home', compact('passwords'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
+        //
         //
     }
 

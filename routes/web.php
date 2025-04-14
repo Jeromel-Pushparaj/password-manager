@@ -14,6 +14,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/generate', [GeneratorController::class, 'index'])->middleware(['auth', 'verified'])->name('generate');
+Route::post('/generate', [GeneratorController::class, 'create'])->middleware(['auth', 'verified'])->name('createnew');
 
 Route::get('/', [PasswordsController::class, 'index'])->middleware(['auth', 'verified'])->name('home');
 

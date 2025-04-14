@@ -12,8 +12,8 @@
                     <tr>
                         <th class="p-2 border-b border-white/20">No</th>
                         <th class="p-2 border-b border-white/20">Site Name</th>
-
                         <th class="p-2 border-b border-white/20">Email</th>
+                        <th class="p-2 border-b border-white/20">UserName</th>
                         <th class="p-2 border-b border-white/20">Password</th>
                         <th class="p-2 border-b border-white/20">Actions</th>
                     </tr>
@@ -24,10 +24,16 @@
                             <td class="p-2 text-center">{{ $site->id }}</td>
                             <td class="p-2 text-center">{{ $site->site }}</td>
                             <td class="p-2 text-center">{{ $site->email }}</td>
+                            <td class="p-2 text-center">{{ $site->username }}</td>
                             <td class="p-2 text-center">************</td>
                             <td class="flex gap-2 justify-center p-2 text-center">
                                 <button class="p-1 bg-gray-600 rounded-md hover:bg-gray-700"><i
                                         class="fas fa-eye"></i></button>
+                                <button class="p-1 bg-gray-600 rounded-md hover:bg-gray-700"><i
+                                        class="fas fa-trash"></i></button>
+                                <button class="p-1 bg-gray-600 rounded-md hover:bg-gray-700"><i
+                                        class="fas fa-pencil"></i></button>
+
                                 <button class="p-1 bg-gray-600 rounded-md hover:bg-gray-700"><i
                                         class="fas fa-copy"></i></button>
                             </td>
