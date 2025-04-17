@@ -73,31 +73,42 @@ class GeneratorController extends Controller
      */
     public function create(Request $request)
     {
-        $site = $request->input('site');
-        $username = $request->input('username');
-        $email = $request->input('email');
-        $lenth = $request->input('lenth');
-        $category = $request->input('category');
 
-        if (isset($site, $username, $email, $category)) {
+        $lenth = $request->input('lenth');
+        if ($request->input('action') == 'save') {
+            $site = $request->input('site');
+            $username = $request->input('username');
+            $email = $request->input('email');
+            $lenth = $request->input('lenth');
+            $category = $request->input('category');
+            $password = $request->input('password');
+
+            if (isset($site, $username, $email, $category)) {
+                Passwords::create([
+                    'site' => $site,
+                    'username' => $username,
+                    'email' => $email,
+                    'password' => $password,
+                    'category' => $category,
+                ]);
+
+            } else {
+                //
+            }
+
+            return redirect()->route('home');
+        }
+        if ($request->input('action') == 'generate') {
 
             $caps = $request->input('caps') ?? 0;
             $numeric = $request->input('nums') ?? 0;
             $symbols = $request->input('symbols') ?? 0;
             $this->passwd = $this->generatePasswd($lenth, $caps, $numeric, $symbols);
-            Passwords::create([
-                'site' => $site,
-                'username' => $username,
-                'email' => $email,
-                'password' => $this->passwd,
-                'category' => $category,
-            ]);
 
-        } else {
-            //
+            $pass = $this->passwd;
+
+            return view('generate.index', compact('pass'));
         }
-
-        return redirect()->route('home');
 
     }
 
@@ -120,17 +131,59 @@ class GeneratorController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Passwords $passwords)
+    public function edit($id)
     {
         //
+
+        $passwords = Passwords::findOrFail($id);
+
+        return view('edit', compact('passwords'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Passwords $passwords)
+    public function update(Request $request, $id)
     {
-        //
+
+        $lenth = $request->input('lenth');
+        if ($request->input('action') == 'save') {
+            $site = $request->input('site');
+            $username = $request->input('username');
+            $email = $request->input('email');
+            $lenth = $request->input('lenth');
+            $category = $request->input('category');
+            $password = $request->input('password');
+
+            if (isset($site, $username, $email, $category)) {
+                $passwords = Passwords::findOrFail($id);
+                $passwords->update([
+                    'site' => $site,
+                    'username' => $username,
+                    'email' => $email,
+                    'password' => $password,
+                    'category' => $category,
+                ]);
+
+            } else {
+                //
+            }
+
+            return redirect()->route('home');
+        }
+        if ($request->input('action') == 'generate') {
+
+            $caps = $request->input('caps') ?? 0;
+            $numeric = $request->input('nums') ?? 0;
+            $symbols = $request->input('symbols') ?? 0;
+            $this->passwd = $this->generatePasswd($lenth, $caps, $numeric, $symbols);
+
+            $pass = $this->passwd;
+            $passwords = Passwords::findOrFail($id);
+
+            return view('edit', compact('pass', 'passwords'));
+        }
+
     }
 
     /**

@@ -62,8 +62,12 @@ class PasswordsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Passwords $passwords)
+    public function destroy($id)
     {
         //
+        $passwords = Passwords::findOrFail($id);
+        $passwords->delete();
+
+        return redirect()->route('home');
     }
 }
