@@ -13,7 +13,11 @@ class SearchBar extends Component
     {
         $passwords = [];
         if (strlen($this->search) >= 1) {
-            $passwords = Passwords::where('site', 'like', '%'.$this->search.'%')->limit(7)->get();
+            $passwords = Passwords::where('site', 'like', '%'.$this->search.'%')
+                ->orWhere('email', 'like', '%'.$this->search.'%')
+                ->orWhere('username', 'like', '%'.$this->search.'%')
+                ->limit(7)
+                ->get();
 
             return view('livewire.search-bar', compact('passwords'));
         }
